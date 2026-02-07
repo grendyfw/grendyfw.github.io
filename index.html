@@ -6,7 +6,6 @@
 <title>Will You Be My Valentine?</title>
 
 <style>
-  /* RESPONSIVE SAFETY */
   *, *::before, *::after {
     box-sizing: border-box;
   }
@@ -20,11 +19,6 @@
     background: #ffd6e8;
     font-family: "Comic Sans MS", cursive, sans-serif;
     overflow: hidden;
-    padding:
-      env(safe-area-inset-top)
-      env(safe-area-inset-right)
-      env(safe-area-inset-bottom)
-      env(safe-area-inset-left);
   }
 
   /* CARD */
@@ -64,10 +58,11 @@
     margin-bottom: 25px;
   }
 
+  /* ⬅️ RESTORED EXACT SIZE */
   .buttons {
     position: relative;
     width: 100%;
-    height: clamp(90px, 18vw, 110px);
+    height: 110px;
   }
 
   button {
@@ -92,7 +87,6 @@
     box-shadow: 0 6px 15px rgba(255,77,109,0.6);
   }
 
-  /* Disable hover zoom on touch devices */
   @media (hover: none) {
     #yes:hover {
       transform: translateX(-50%);
@@ -247,9 +241,15 @@ yesBtn.addEventListener("click", () => {
 
   setTimeout(() => {
     page.innerHTML = `
-      <div style="display:flex;align-items:center;justify-content:center;height:100svh;">
+      <div style="
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        height:100svh;
+        text-align:center;
+      ">
         <h1 class="typewriter" id="final"
-            style="font-size:clamp(28px,8vw,48px);"></h1>
+            style="font-size:clamp(26px, 8vw, 48px);"></h1>
       </div>
     `;
 
