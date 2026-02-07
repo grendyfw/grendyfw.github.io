@@ -6,6 +6,10 @@
 <title>Will You Be My Valentine?</title>
 
 <style>
+  * {
+    box-sizing: border-box;
+  }
+
   body {
     margin: 0;
     min-height: 100svh;
@@ -45,6 +49,7 @@
   img {
     width: 100%;
     max-width: 220px;
+    height: auto;
     margin-bottom: 15px;
   }
 
@@ -89,12 +94,12 @@
   }
 
   .note {
-    font-size: 12px;
+    font-size: clamp(11px, 3vw, 12px);
     color: #888;
     margin-top: 15px;
   }
 
-  /* PETALS (BEHIND CARD) */
+  /* PETALS */
   .petal {
     position: fixed;
     top: -30px;
@@ -142,14 +147,6 @@
   @keyframes blink {
     0%,50% { border-color: transparent; }
     51%,100% { border-color: #ff4d6d; }
-  }
-
-  .fade {
-    animation: fade 0.6s forwards;
-  }
-
-  @keyframes fade {
-    to { opacity: 0; }
   }
 </style>
 </head>
@@ -238,13 +235,13 @@ yesBtn.addEventListener("click", () => {
 
   setTimeout(() => {
     page.innerHTML = `
-      <div style="display:flex;align-items:center;justify-content:center;height:100svh;">
+      <div style="display:flex;align-items:center;justify-content:center;height:100svh;text-align:center;padding:20px;">
         <h1 class="typewriter" id="final"
             style="font-size:clamp(28px,8vw,48px);"></h1>
       </div>
     `;
 
-    const text = "💖 YAY!!! BEST VALENTINE EVER 💖";
+    const text = "💖 YAY!! BEST VALENTINE EVER 💖";
     let i = 0;
     const el = document.getElementById("final");
     const t = setInterval(() => {
