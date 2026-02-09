@@ -6,156 +6,262 @@
 <title>Will You Be My Valentine?</title>
 
 <style>
-  *, *::before, *::after {
-    box-sizing: border-box;
-  }
+*, *::before, *::after { box-sizing: border-box; }
 
-  body {
-    margin: 0;
-    min-height: 100svh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #ffd6e8;
-    font-family: "Comic Sans MS", cursive, sans-serif;
-    overflow: hidden;
-  }
+body {
+  margin: 0;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffd6e8;
+  font-family: "Comic Sans MS", cursive, sans-serif;
+  overflow: hidden;
+}
 
-  /* CARD */
-  .card {
-    background: white;
-    padding: clamp(20px, 4vw, 30px);
-    border-radius: 20px;
-    text-align: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-    width: min(92vw, 380px);
-    z-index: 2;
-    animation: zoomIn 0.6s ease;
-  }
+#page {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  @keyframes zoomIn {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
-  }
+/* CARD */
+.card {
+  background: white;
+  padding: clamp(20px, 4vw, 30px);
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  width: min(92vw, 380px);
+  z-index: 2;
+  animation: zoomIn 0.6s ease;
+  position: relative;
+}
 
-  .card.exit {
-    animation: exit 0.6s forwards;
-  }
+@keyframes zoomIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
 
-  @keyframes exit {
-    to { opacity: 0; transform: scale(0.9); }
-  }
+/* POP */
+.card.pop {
+  animation: cardPop 0.25s ease;
+}
 
-  img {
-    width: 100%;
-    max-width: 220px;
-    height: auto;
-    margin-bottom: 15px;
-  }
+@keyframes cardPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
 
-  h1 {
-    font-size: clamp(18px, 5vw, 22px);
-    margin-bottom: 25px;
-  }
+.card.exit {
+  animation: exit 0.6s forwards;
+}
 
-  /* ⬅️ RESTORED EXACT SIZE */
-  .buttons {
-    position: relative;
-    width: 100%;
-    height: 110px;
-  }
+@keyframes exit {
+  to { opacity: 0; transform: scale(0.9); }
+}
 
-  button {
-    padding: clamp(12px, 3.5vw, 16px) clamp(22px, 6vw, 30px);
-    font-size: clamp(14px, 4vw, 17px);
-    border: none;
-    border-radius: 999px;
-    cursor: pointer;
-    position: absolute;
-  }
+img {
+  width: 100%;
+  max-width: 220px;
+  margin-bottom: 15px;
+}
 
-  #yes {
-    background: #ff4d6d;
-    color: white;
-    left: 50%;
-    transform: translateX(-50%);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
+h1 {
+  font-size: clamp(18px, 5vw, 22px);
+  margin-bottom: 25px;
+}
 
-  #yes:hover {
-    transform: translateX(-50%) scale(1.15);
-    box-shadow: 0 6px 15px rgba(255,77,109,0.6);
-  }
+/* BUTTONS */
+.buttons {
+  position: relative;
+  width: 100%;
+  height: 110px;
+}
 
-  @media (hover: none) {
-    #yes:hover {
-      transform: translateX(-50%);
-      box-shadow: none;
-    }
-  }
+button {
+  padding: clamp(12px, 3.5vw, 16px) clamp(22px, 6vw, 30px);
+  font-size: clamp(14px, 4vw, 17px);
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  position: absolute;
+}
 
-  #no {
-    background: #e0e0e0;
-    color: #333;
-    left: 60%;
-    top: 0;
-  }
+/* YES */
+#yes {
+  background: #ff4d6d;
+  color: white;
+  top: 50%;
+  left: 50%;
+  transform: translate(-110%, -50%);
+}
 
-  .note {
-    font-size: 12px;
-    color: #888;
-    margin-top: 15px;
-  }
+#yes:hover {
+  transform: translate(-110%, -50%) scale(1.1);
+}
 
-  /* PETALS */
-  .petal {
-    position: fixed;
-    top: -30px;
-    pointer-events: none;
-    z-index: 0;
-    animation: fall linear forwards, sway ease-in-out infinite;
-  }
+/* NO */
+#no {
+  background: #e0e0e0;
+  color: #333;
+  top: 50%;
+  left: 50%;
+  transform: translate(10%, -50%);
+}
 
-  @keyframes fall {
-    to { transform: translateY(115vh); opacity: 0; }
-  }
+.note {
+  font-size: 12px;
+  color: #888;
+  margin-top: 15px;
+}
 
-  @keyframes sway {
-    0% { margin-left: 0; }
-    50% { margin-left: 20px; }
-    100% { margin-left: 0; }
-  }
+/* FINAL */
+#final-wrapper {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+  z-index: 3;
+}
 
-  /* HEARTS */
-  .heart {
-    position: fixed;
-    bottom: -20px;
-    pointer-events: none;
-    z-index: 1;
-    animation: rise 6s linear forwards;
-  }
+#final-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  @keyframes rise {
-    to { transform: translateY(-110vh); opacity: 0; }
-  }
+#final {
+  max-width: 90vw;
+  font-size: clamp(22px, 8vw, 56px);
+  color: #ff4d6d;
+  cursor: pointer;
+  display: inline-block;
+  transition: opacity 0.6s ease, transform 0.25s ease;
+}
 
-  /* CONFETTI */
-  @keyframes confetti {
-    to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
-  }
+#final:hover {
+  transform: scale(1.05);
+}
 
-  /* TYPEWRITER */
-  .typewriter {
-    overflow: hidden;
-    white-space: nowrap;
-    border-right: 3px solid #ff4d6d;
-    animation: blink 0.8s infinite;
-  }
+/* TYPEWRITER */
+.typewriter {
+  border-right: 4px solid #ff4d6d;
+  padding-right: 6px;
+  animation: blink 0.8s infinite;
+}
 
-  @keyframes blink {
-    0%,50% { border-color: transparent; }
-    51%,100% { border-color: #ff4d6d; }
+@keyframes blink {
+  0%,50% { border-color: transparent; }
+  51%,100% { border-color: #ff4d6d; }
+}
+
+#final.fade-out {
+  opacity: 0;
+}
+
+/* FINAL IMAGE — FIX IS HERE */
+#final-image {
+  max-width: 260px;
+  width: 100%;
+  opacity: 0;
+  position: absolute;
+  transition: opacity 0.6s ease;
+  pointer-events: none; /* 🔥 FIX */
+}
+
+#final-image.show {
+  opacity: 1;
+  pointer-events: auto;
+  animation: fadeInImage 2s ease forwards;
+}
+
+/* BURST */
+.burst {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  animation: burst 700ms ease-out forwards;
+}
+
+@keyframes burst {
+  to {
+    transform:
+      translate(-50%, -50%)
+      translate(var(--x), var(--y))
+      scale(0.3);
+    opacity: 0;
   }
+}
+
+/* PETALS */
+.petal {
+  position: fixed;
+  top: -30px;
+  pointer-events: none;
+  z-index: 0;
+  animation: fall linear forwards, sway ease-in-out infinite;
+}
+
+@keyframes fall {
+  to { transform: translateY(115vh); opacity: 0; }
+}
+
+@keyframes sway {
+  0% { margin-left: 0; }
+  50% { margin-left: 20px; }
+  100% { margin-left: 0; }
+}
+
+/* HEARTS */
+.heart {
+  position: fixed;
+  bottom: -20px;
+  pointer-events: none;
+  z-index: 1;
+  animation: rise 6s linear forwards;
+}
+
+@keyframes rise {
+  to { transform: translateY(-110vh); opacity: 0; }
+}
+
+/* CONFETTI */
+.confetti {
+  position: fixed;
+  top: -20px;
+  width: 10px;
+  height: 14px;
+  background: hsl(var(--hue), 80%, 60%);
+  opacity: 0.9;
+  pointer-events: none;
+  z-index: 2;
+  animation: confetti linear forwards;
+}
+
+@keyframes confetti {
+  to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+}
+
+@keyframes fadeInImage {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 </style>
 </head>
 
@@ -163,7 +269,7 @@
 
 <div id="page">
   <div class="card">
-    <img src="couple.png" alt="Couple">
+    <img src="couple.png">
     <h1>Angela, will you be my Valentine?</h1>
 
     <div class="buttons">
@@ -192,14 +298,13 @@ function moveNo() {
   noBtn.style.left = Math.random() * (a.width - b.width) + "px";
   noBtn.style.top = Math.random() * (a.height - b.height) + "px";
 }
-
 noBtn.addEventListener("mouseover", moveNo);
 noBtn.addEventListener("touchstart", e => {
   e.preventDefault();
   moveNo();
 });
 
-/* FLOWERS */
+/* PETALS */
 const petals = setInterval(() => {
   const p = document.createElement("div");
   p.className = "petal";
@@ -211,11 +316,44 @@ const petals = setInterval(() => {
   setTimeout(() => p.remove(), 10000);
 }, 300);
 
+/* BURST */
+function popBurst() {
+  card.classList.add("pop");
+  setTimeout(() => card.classList.remove("pop"), 250);
+
+  for (let i = 0; i < 24; i++) {
+    const b = document.createElement("div");
+    b.className = "burst";
+    b.textContent = Math.random() > 0.5 ? "💖" : "✨";
+    b.style.fontSize = 14 + Math.random() * 18 + "px";
+    b.style.setProperty("--x", `${(Math.random() - 0.5) * 260}px`);
+    b.style.setProperty("--y", `${(Math.random() - 0.5) * 260}px`);
+    card.appendChild(b);
+    setTimeout(() => b.remove(), 700);
+  }
+}
+
+/* CONFETTI */
+function launchConfetti() {
+  for (let i = 0; i < 80; i++) {
+    const c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = Math.random() * 100 + "vw";
+    c.style.animationDuration = 3 + Math.random() * 3 + "s";
+    c.style.setProperty("--hue", Math.random() * 360);
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 6000);
+  }
+}
+
 /* YES CLICK */
 yesBtn.addEventListener("click", () => {
   clearInterval(petals);
-  card.classList.add("exit");
   pop.play();
+  popBurst();
+  launchConfetti();
+
+  setTimeout(() => card.classList.add("exit"), 250);
 
   setInterval(() => {
     const h = document.createElement("div");
@@ -227,40 +365,33 @@ yesBtn.addEventListener("click", () => {
     setTimeout(() => h.remove(), 6000);
   }, 300);
 
-  for (let i = 0; i < 120; i++) {
-    const c = document.createElement("div");
-    c.textContent = "🎉";
-    c.style.position = "fixed";
-    c.style.left = Math.random() * 100 + "vw";
-    c.style.top = "-10px";
-    c.style.fontSize = 16 + Math.random() * 20 + "px";
-    c.style.animation = "confetti 2.5s linear forwards";
-    document.body.appendChild(c);
-    setTimeout(() => c.remove(), 2500);
-  }
-
   setTimeout(() => {
     page.innerHTML = `
-      <div style="
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        height:100svh;
-        text-align:center;
-      ">
-        <h1 class="typewriter" id="final"
-            style="font-size:clamp(26px, 8vw, 48px);"></h1>
+      <div id="final-wrapper">
+        <div id="final-container">
+          <h1 id="final" class="typewriter"></h1>
+          <img id="final-image" src="1.png">
+        </div>
       </div>
     `;
 
     const text = "💖 YAY!!! BEST VALENTINE EVER 💖";
     let i = 0;
     const el = document.getElementById("final");
+
     const t = setInterval(() => {
       el.textContent += text.charAt(i++);
-      if (i === text.length) clearInterval(t);
+      if (i === text.length) {
+        clearInterval(t);
+        el.classList.remove("typewriter");
+
+        el.addEventListener("click", () => {
+          el.classList.add("fade-out");
+          document.getElementById("final-image").classList.add("show");
+        }, { once: true });
+      }
     }, 120);
-  }, 600);
+  }, 700);
 });
 </script>
 
