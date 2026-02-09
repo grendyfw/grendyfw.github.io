@@ -39,47 +39,26 @@ body {
   position: relative;
 }
 
-@keyframes zoomIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
-}
+@keyframes zoomIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
 /* POP */
-.card.pop {
-  animation: cardPop 0.25s ease;
-}
+.card.pop { animation: cardPop 0.25s ease; }
+@keyframes cardPop { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-@keyframes cardPop {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-
-.card.exit {
-  animation: exit 0.6s forwards;
-}
-
-@keyframes exit {
-  to { opacity: 0; transform: scale(0.9); }
-}
+.card.exit { animation: exit 0.6s forwards; }
+@keyframes exit { to { opacity: 0; transform: scale(0.9); } }
 
 img {
   width: 100%;
   max-width: 220px;
   margin-bottom: 15px;
+  transition: transform 0.25s ease;
 }
 
-h1 {
-  font-size: clamp(18px, 5vw, 22px);
-  margin-bottom: 25px;
-}
+h1 { font-size: clamp(18px, 5vw, 22px); margin-bottom: 25px; }
 
 /* BUTTONS */
-.buttons {
-  position: relative;
-  width: 100%;
-  height: 110px;
-}
+.buttons { position: relative; width: 100%; height: 110px; }
 
 button {
   padding: clamp(12px, 3.5vw, 16px) clamp(22px, 6vw, 30px);
@@ -91,32 +70,13 @@ button {
 }
 
 /* YES */
-#yes {
-  background: #ff4d6d;
-  color: white;
-  top: 50%;
-  left: 50%;
-  transform: translate(-110%, -50%);
-}
-
-#yes:hover {
-  transform: translate(-110%, -50%) scale(1.1);
-}
+#yes { background: #ff4d6d; color: white; top: 50%; left: 50%; transform: translate(-110%, -50%); }
+#yes:hover { transform: translate(-110%, -50%) scale(1.1); }
 
 /* NO */
-#no {
-  background: #e0e0e0;
-  color: #333;
-  top: 50%;
-  left: 50%;
-  transform: translate(10%, -50%);
-}
+#no { background: #e0e0e0; color: #333; top: 50%; left: 50%; transform: translate(10%, -50%); }
 
-.note {
-  font-size: 12px;
-  color: #888;
-  margin-top: 15px;
-}
+.note { font-size: 12px; color: #888; margin-top: 15px; }
 
 /* FINAL */
 #final-wrapper {
@@ -135,6 +95,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 }
 
 #final {
@@ -143,140 +104,61 @@ button {
   color: #ff4d6d;
   cursor: pointer;
   display: inline-block;
+  opacity: 0;
   transition: opacity 0.6s ease, transform 0.25s ease;
 }
 
-#final:hover {
-  transform: scale(1.05);
-}
+#final.hoverable:hover { transform: scale(1.05); }
 
 /* TYPEWRITER */
-.typewriter {
-  border-right: 4px solid #ff4d6d;
-  padding-right: 6px;
-  animation: blink 0.8s infinite;
-}
+.typewriter { border-right: 4px solid #ff4d6d; padding-right: 6px; animation: blink 0.8s infinite; }
+@keyframes blink { 0%,50% { border-color: transparent; } 51%,100% { border-color: #ff4d6d; } }
 
-@keyframes blink {
-  0%,50% { border-color: transparent; }
-  51%,100% { border-color: #ff4d6d; }
-}
+#final.fade-out { opacity: 0; }
 
-#final.fade-out {
-  opacity: 0;
-}
-
-/* FINAL IMAGE — FIX IS HERE */
+/* FINAL IMAGE */
 #final-image {
   max-width: 260px;
   width: 100%;
   opacity: 0;
   position: absolute;
-  transition: opacity 0.6s ease;
-  pointer-events: none; /* 🔥 FIX */
+  transition: opacity 3s ease, transform 0.25s ease;
+  pointer-events: none;
 }
 
-#final-image.show {
-  opacity: 1;
-  pointer-events: auto;
-  animation: fadeInImage 2s ease forwards;
-}
+#final-image.show { opacity: 1; }
+
+#final-image:hover { transform: scale(1.05); }
 
 /* BURST */
-.burst {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  animation: burst 700ms ease-out forwards;
-}
-
-@keyframes burst {
-  to {
-    transform:
-      translate(-50%, -50%)
-      translate(var(--x), var(--y))
-      scale(0.3);
-    opacity: 0;
-  }
-}
+.burst { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); pointer-events: none; animation: burst 700ms ease-out forwards; }
+@keyframes burst { to { transform: translate(-50%, -50%) translate(var(--x), var(--y)) scale(0.3); opacity: 0; } }
 
 /* PETALS */
-.petal {
-  position: fixed;
-  top: -30px;
-  pointer-events: none;
-  z-index: 0;
-  animation: fall linear forwards, sway ease-in-out infinite;
-}
-
-@keyframes fall {
-  to { transform: translateY(115vh); opacity: 0; }
-}
-
-@keyframes sway {
-  0% { margin-left: 0; }
-  50% { margin-left: 20px; }
-  100% { margin-left: 0; }
-}
+.petal { position: fixed; top: -30px; pointer-events: none; z-index: 0; animation: fall linear forwards, sway ease-in-out infinite; }
+@keyframes fall { to { transform: translateY(115vh); opacity: 0; } }
+@keyframes sway { 0% { margin-left:0; } 50% { margin-left:20px; } 100% { margin-left:0; } }
 
 /* HEARTS */
-.heart {
-  position: fixed;
-  bottom: -20px;
-  pointer-events: none;
-  z-index: 1;
-  animation: rise 6s linear forwards;
-}
-
-@keyframes rise {
-  to { transform: translateY(-110vh); opacity: 0; }
-}
+.heart { position: fixed; bottom: -20px; pointer-events: none; z-index: 1; animation: rise 6s linear forwards; }
+@keyframes rise { to { transform: translateY(-110vh); opacity: 0; } }
 
 /* CONFETTI */
-.confetti {
-  position: fixed;
-  top: -20px;
-  width: 10px;
-  height: 14px;
-  background: hsl(var(--hue), 80%, 60%);
-  opacity: 0.9;
-  pointer-events: none;
-  z-index: 2;
-  animation: confetti linear forwards;
-}
-
-@keyframes confetti {
-  to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
-}
-
-@keyframes fadeInImage {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
+.confetti { position: fixed; top: -20px; width: 10px; height: 14px; background: hsl(var(--hue), 80%, 60%); opacity: 0.9; pointer-events: none; z-index: 2; animation: confetti linear forwards; }
+@keyframes confetti { to { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
 
 </style>
 </head>
 
 <body>
-
 <div id="page">
   <div class="card">
     <img src="couple.png">
     <h1>Angela, will you be my Valentine?</h1>
-
     <div class="buttons">
       <button id="yes">Yes</button>
       <button id="no">No</button>
     </div>
-
     <div class="note">*No seems a bit shy*</div>
   </div>
 </div>
@@ -299,99 +181,151 @@ function moveNo() {
   noBtn.style.top = Math.random() * (a.height - b.height) + "px";
 }
 noBtn.addEventListener("mouseover", moveNo);
-noBtn.addEventListener("touchstart", e => {
-  e.preventDefault();
-  moveNo();
-});
+noBtn.addEventListener("touchstart", e => { e.preventDefault(); moveNo(); });
 
 /* PETALS */
 const petals = setInterval(() => {
   const p = document.createElement("div");
   p.className = "petal";
   p.textContent = Math.random() > 0.5 ? "🌸" : "🌹";
-  p.style.left = Math.random() * 100 + "vw";
-  p.style.fontSize = 16 + Math.random() * 20 + "px";
-  p.style.animationDuration = `${6 + Math.random()*4}s, ${3 + Math.random()*2}s`;
+  p.style.left = Math.random()*100 + "vw";
+  p.style.fontSize = 16 + Math.random()*20 + "px";
+  p.style.animationDuration = `${6+Math.random()*4}s, ${3+Math.random()*2}s`;
   document.body.appendChild(p);
-  setTimeout(() => p.remove(), 10000);
-}, 300);
+  setTimeout(()=>p.remove(),10000);
+},300);
 
 /* BURST */
 function popBurst() {
   card.classList.add("pop");
-  setTimeout(() => card.classList.remove("pop"), 250);
-
-  for (let i = 0; i < 24; i++) {
-    const b = document.createElement("div");
-    b.className = "burst";
-    b.textContent = Math.random() > 0.5 ? "💖" : "✨";
-    b.style.fontSize = 14 + Math.random() * 18 + "px";
-    b.style.setProperty("--x", `${(Math.random() - 0.5) * 260}px`);
-    b.style.setProperty("--y", `${(Math.random() - 0.5) * 260}px`);
+  setTimeout(()=>card.classList.remove("pop"),250);
+  for(let i=0;i<24;i++){
+    const b=document.createElement("div");
+    b.className="burst";
+    b.textContent=Math.random()>0.5?"💖":"✨";
+    b.style.fontSize=14+Math.random()*18+"px";
+    b.style.setProperty("--x",`${(Math.random()-0.5)*260}px`);
+    b.style.setProperty("--y",`${(Math.random()-0.5)*260}px`);
     card.appendChild(b);
-    setTimeout(() => b.remove(), 700);
+    setTimeout(()=>b.remove(),700);
   }
 }
 
 /* CONFETTI */
-function launchConfetti() {
-  for (let i = 0; i < 80; i++) {
-    const c = document.createElement("div");
-    c.className = "confetti";
-    c.style.left = Math.random() * 100 + "vw";
-    c.style.animationDuration = 3 + Math.random() * 3 + "s";
-    c.style.setProperty("--hue", Math.random() * 360);
+function launchConfetti(){
+  for(let i=0;i<80;i++){
+    const c=document.createElement("div");
+    c.className="confetti";
+    c.style.left=Math.random()*100 + "vw";
+    c.style.animationDuration=3+Math.random()*3+"s";
+    c.style.setProperty("--hue", Math.random()*360);
     document.body.appendChild(c);
-    setTimeout(() => c.remove(), 6000);
+    setTimeout(()=>c.remove(),6000);
   }
 }
 
 /* YES CLICK */
-yesBtn.addEventListener("click", () => {
+yesBtn.addEventListener("click", ()=> {
   clearInterval(petals);
   pop.play();
   popBurst();
   launchConfetti();
 
-  setTimeout(() => card.classList.add("exit"), 250);
+  setTimeout(()=>card.classList.add("exit"),250);
 
-  setInterval(() => {
-    const h = document.createElement("div");
-    h.className = "heart";
-    h.textContent = "💕";
-    h.style.left = Math.random() * 100 + "vw";
-    h.style.fontSize = 16 + Math.random() * 20 + "px";
+  setInterval(()=>{
+    const h=document.createElement("div");
+    h.className="heart";
+    h.textContent="💕";
+    h.style.left=Math.random()*100 + "vw";
+    h.style.fontSize=16+Math.random()*20+"px";
     document.body.appendChild(h);
-    setTimeout(() => h.remove(), 6000);
-  }, 300);
+    setTimeout(()=>h.remove(),6000);
+  },300);
 
-  setTimeout(() => {
+  setTimeout(()=>{
     page.innerHTML = `
       <div id="final-wrapper">
         <div id="final-container">
           <h1 id="final" class="typewriter"></h1>
-          <img id="final-image" src="1.png">
+          <img id="final-image"/>
         </div>
       </div>
     `;
 
-    const text = "💖 YAY!!! BEST VALENTINE EVER 💖";
-    let i = 0;
+    const messages = ["💖 YAY!!! BEST VALENTINE EVER 💖","🎵 It started from a song 🎵","🌹 LOVE IS IN THE AIR 🌹"];
+    const images = ["1.png","2.png","3.png"];
+    let index = 0;
     const el = document.getElementById("final");
+    const img = document.getElementById("final-image");
 
-    const t = setInterval(() => {
-      el.textContent += text.charAt(i++);
-      if (i === text.length) {
-        clearInterval(t);
-        el.classList.remove("typewriter");
+    function typeWriter(str, callback){
+      el.textContent="";
+      el.classList.add("typewriter");
+      el.style.opacity=1;
+      el.classList.remove("hoverable");
+      let i=0;
+      const t=setInterval(()=>{
+        el.textContent+=str.charAt(i++);
+        if(i===str.length){
+          clearInterval(t);
+          el.classList.remove("typewriter");
+          el.classList.add("hoverable");
+          callback();
+        }
+      },120);
+    }
 
-        el.addEventListener("click", () => {
+    function showNext(){
+      el.classList.remove("fade-out");
+      el.style.opacity=1;
+      img.classList.remove("show");
+      img.style.opacity=0;
+      img.style.pointerEvents = "none"; // disable click before fade-in
+
+      typeWriter(messages[index], ()=>{
+        el.onclick = ()=>{
           el.classList.add("fade-out");
-          document.getElementById("final-image").classList.add("show");
-        }, { once: true });
-      }
-    }, 120);
-  }, 700);
+          setTimeout(()=>{
+            el.style.opacity=0;
+            img.src = images[index];
+            img.classList.add("show");
+            img.style.opacity=0;
+            setTimeout(()=>{ img.style.opacity=1; },50);
+
+            // enable click only after fade-in
+            img.addEventListener("transitionend", function enableClick(e){
+              if(e.propertyName === "opacity"){
+                img.style.pointerEvents = "auto";
+                img.removeEventListener("transitionend", enableClick);
+              }
+            });
+
+            img.onclick = ()=>{
+              img.style.pointerEvents = "none"; // disable click during fade-out
+              img.style.opacity = 0;
+
+              // wait until fade-out finishes
+              img.addEventListener("transitionend", function afterFadeOut(e){
+                if(e.propertyName === "opacity"){
+                  img.classList.remove("show");
+                  img.removeEventListener("transitionend", afterFadeOut);
+
+                  // only now show next text
+                  index++;
+                  if(index < messages.length){
+                    showNext();
+                  }
+                }
+              });
+            };
+          },600);
+        };
+      });
+    }
+
+    showNext();
+  },700);
 });
 </script>
 
