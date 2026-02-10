@@ -184,7 +184,7 @@ noBtn.addEventListener("mouseover", moveNo);
 noBtn.addEventListener("touchstart", e => { e.preventDefault(); moveNo(); });
 
 /* PETALS */
-const petals = setInterval(() => {
+let petals = setInterval(() => {
   const p = document.createElement("div");
   p.className = "petal";
   p.textContent = Math.random() > 0.5 ? "🌸" : "🌹";
@@ -233,9 +233,9 @@ yesBtn.addEventListener("click", ()=> {
 
   setTimeout(()=>card.classList.add("exit"),250);
 
-  setInterval(()=>{
-    const h=document.createElement("div");
-    h.className="heart";
+  let hearts = setInterval(()=>{
+    const h = document.createElement("div");
+    h.className = "heart";
     h.textContent="💕";
     h.style.left=Math.random()*100 + "vw";
     h.style.fontSize=16+Math.random()*20+"px";
@@ -253,8 +253,8 @@ yesBtn.addEventListener("click", ()=> {
       </div>
     `;
 
-    const messages = ["💖 YAY!!! BEST VALENTINE EVER 💖","🎵 It started from a song 🎵","🌸 Then we would get along 🌸","❤️ I've been stealing glances at your tenderly smile ❤️", "💞 There's no girl as sweet as you 💞", "🥰 You're so cute and pretty, you make my heart melt 🥰", "☎️Your telephone number is my favorite place☎️", "🌹 I could just look at you all night long 🌹", "💌 If i have favorite song it would be you 💌"];
-    const images = ["1.png","2.png","3.png","4.png", "5.png", "6.png", "7.png", "8.png", "9.png"];
+    const messages = ["💖 YAY!!! BEST VALENTINE EVER 💖","🎵 It started from a song 🎵","🌸 Then we would get along 🌸","❤️ I've been stealing glances at your tenderly smile ❤️", "💞 There's no girl as sweet as you 💞", "🥰 You're so cute and pretty, you make my heart melt 🥰", "☎️Your telephone number is my favorite place☎️", "🌹 I could just look at you all night long 🌹", "💌 If i have a favorite song it would be you 💌", "💘 Spending time with you is my desire 💘"];
+    const images = ["1.png","2.png","3.png","4.png","5.png","6.png","7.png","8.png","9.png","10.png"];
     let index = 0;
     const el = document.getElementById("final");
     const img = document.getElementById("final-image");
@@ -293,7 +293,6 @@ yesBtn.addEventListener("click", ()=> {
             img.style.opacity=0;
             setTimeout(()=>{ img.style.opacity=1; },50);
 
-            // enable click only after fade-in
             img.addEventListener("transitionend", function enableClick(e){
               if(e.propertyName === "opacity"){
                 img.style.pointerEvents = "auto";
@@ -305,16 +304,33 @@ yesBtn.addEventListener("click", ()=> {
               img.style.pointerEvents = "none"; // disable click during fade-out
               img.style.opacity = 0;
 
-              // wait until fade-out finishes
               img.addEventListener("transitionend", function afterFadeOut(e){
                 if(e.propertyName === "opacity"){
                   img.classList.remove("show");
                   img.removeEventListener("transitionend", afterFadeOut);
-
-                  // only now show next text
                   index++;
                   if(index < messages.length){
                     showNext();
+                  } else {
+                    // AFTER 10.PNG CLICK
+                    launchConfetti();
+                    clearInterval(hearts);
+
+                    petals = setInterval(()=>{
+                      const p = document.createElement("div");
+                      p.className="petal";
+                      p.textContent = Math.random()>0.5 ? "🌸":"🌹";
+                      p.style.left = Math.random()*100 + "vw";
+                      p.style.fontSize = 16+Math.random()*20+"px";
+                      p.style.animation = `fall ${6+Math.random()*4}s linear forwards, sway ${3+Math.random()*2}s ease-in-out infinite`;
+                      document.body.appendChild(p);
+                      setTimeout(()=>p.remove(),10000);
+                    },300);
+
+                    const finalMessage = "💖 Happy Valentine's day, dear Angela 💖";
+                    typeWriter(finalMessage, ()=>{
+                      el.onclick = ()=> location.reload();
+                    });
                   }
                 }
               });
