@@ -147,6 +147,98 @@ button {
 .confetti { position: fixed; top: -20px; width: 10px; height: 14px; background: hsl(var(--hue), 80%, 60%); opacity: 0.9; pointer-events: none; z-index: 2; animation: confetti linear forwards; }
 @keyframes confetti { to { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
 
+/* ENVELOPE */
+#envelope {
+  width: 140px;
+  height: 90px;
+  background: #DDA0DD; /* Light purple */
+  margin: 25px auto 10px;
+  position: relative;
+  cursor: pointer;
+  transition: transform 1.2s ease, opacity 0.5s ease; /* Added opacity transition */
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  z-index: 1; /* Ensure it's above the image */
+  opacity: 0; /* Start invisible */
+}
+
+#envelope:hover {
+  transform: scale(1.15);
+}
+
+/* flap */
+#envelope::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 70px solid transparent;
+  border-right: 70px solid transparent;
+  border-top: 45px solid #BA55D3; /* Medium purple for flap */
+  transform-origin: top;
+  transition: transform 0.5s ease;
+}
+
+/* open animation */
+#envelope.open::before {
+  transform: rotateX(180deg);
+}
+
+/* LETTER OVERLAY */
+#letter-wrapper {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.5); /* Transparent background */
+  backdrop-filter: blur(6px);
+  z-index: 999;
+  animation: fadeIn 0.4s ease;
+  overflow-y: auto;
+
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+#letter {
+  background: #fdf6e3;
+  border: none;
+  padding: 25px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 85vh;          /* ✅ prevents vertical expansion */
+  overflow-y: auto;          /* ✅ allows scrolling inside letter */
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  font-family: 'Times New Roman', serif;
+  font-size: 16px;
+  line-height: 1.6;
+  position: relative;
+  border-radius: 8px;
+  animation: letterPop 0.4s ease;
+}
+
+
+@keyframes letterPop {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* close button */
+#close-letter {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 20px;
+  cursor: pointer;
+  color: #7c3aed;
+}
+
 </style>
 </head>
 
@@ -190,7 +282,7 @@ let petals = setInterval(() => {
   p.textContent = Math.random() > 0.5 ? "🌸" : "🌹";
   p.style.left = Math.random()*100 + "vw";
   p.style.fontSize = 16 + Math.random()*20 + "px";
-  p.style.animationDuration = `${6+Math.random()*4}s, ${3+Math.random()*2}s`;
+  p.style.animation = `fall ${6+Math.random()*4}s linear forwards, sway ${3+Math.random()*2}s ease-in-out infinite`;
   document.body.appendChild(p);
   setTimeout(()=>p.remove(),10000);
 },300);
@@ -223,6 +315,21 @@ function launchConfetti(){
     setTimeout(()=>c.remove(),6000);
   }
 }
+
+/* RESTART PETALS */
+function restartPetals() {
+  petals = setInterval(() => {
+    const p = document.createElement("div");
+    p.className = "petal";
+    p.textContent = Math.random() > 0.5 ? "🌸" : "🌹";
+    p.style.left = Math.random() * 100 + "vw";
+    p.style.fontSize = 16 + Math.random() * 20 + "px";
+    p.style.animation = `fall ${6+Math.random()*4}s linear forwards, sway ${3+Math.random()*2}s ease-in-out infinite`;
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 10000);
+  }, 300);
+}
+
 
 /* YES CLICK */
 yesBtn.addEventListener("click", ()=> {
@@ -321,7 +428,7 @@ yesBtn.addEventListener("click", ()=> {
                       p.className="petal";
                       p.textContent = Math.random()>0.5 ? "🌸":"🌹";
                       p.style.left = Math.random()*100 + "vw";
-                      p.style.fontSize = 16+Math.random()*20+"px";
+                      p.style.fontSize = 16+Math.random()*20 + "px";
                       p.style.animation = `fall ${6+Math.random()*4}s linear forwards, sway ${3+Math.random()*2}s ease-in-out infinite`;
                       document.body.appendChild(p);
                       setTimeout(()=>p.remove(),10000);
@@ -330,6 +437,69 @@ yesBtn.addEventListener("click", ()=> {
                     const finalMessage = "💖 Happy Valentine's day, dear Angela 💖";
                     typeWriter(finalMessage, ()=>{
                       el.onclick = ()=> location.reload();
+
+                      // Add envelope and text below the final message
+                      const container = document.getElementById("final-container");
+                      const envelope = document.createElement("div");
+                      envelope.id = "envelope";
+                      container.appendChild(envelope);
+                      const text = document.createElement("p");
+                      text.textContent = "I wrote you a letter.";
+                      text.style.fontSize = "16px";
+                      text.style.color = "#333";
+                      text.style.marginTop = "10px";
+                      container.appendChild(text);
+					  
+
+                      // Fade in the envelope
+                      setTimeout(() => {
+                        envelope.style.opacity = '1';
+                      }, 10); // Small delay to trigger transition
+
+                      envelope.addEventListener("click", (e) => {
+                        e.stopPropagation();
+						
+						clearInterval(petals);
+                        
+                        envelope.classList.add("open"); // animation
+                        setTimeout(() => {
+
+                          const overlay = document.createElement("div");
+                          overlay.id = "letter-wrapper";
+
+
+                           overlay.innerHTML = `
+                            <div id="letter">
+                              <span id="close-letter">&times;</span>
+                              <p>Dear Angela,</p>
+                              <p>From the moment I first laid eyes on you, my heart knew it had found its true companion. Your beauty, both inside and out, captivates me every single day. The way your eyes sparkle with kindness and your smile warms the coldest of nights makes me realize how lucky I am to have you in my life.</p>
+                              <p>I cherish the moments we share, the laughter we create, and the love that grows stronger with each passing day. You are my inspiration, my joy, and my everything. Words cannot fully express the depth of my affection for you, but know that my love for you is eternal and unwavering.</p>
+                              <p>Happy Valentine's Day, my dearest Angela. May our love continue to blossom like the most beautiful flower.</p>
+                              <p>Forever yours,</p>
+                              <p>[Your Name]</p>
+                            </div>
+                          </div>
+                          `;
+
+                          document.body.appendChild(overlay);
+                          // close button
+                          document.getElementById("close-letter").onclick = () => {
+                            overlay.remove();
+                            envelope.classList.remove("open");
+							
+							restartPetals(); 
+                          };
+                          // click outside to close
+                          document.addEventListener("click", (e) => {
+                            if (e.target === overlay) {
+                              overlay.remove();
+                              envelope.classList.remove("open");
+							  
+							  restartPetals();
+                            }
+                          });
+                        }, 500); // Delay to match flap animation
+                      });
                     });
                   }
                 }
@@ -346,4 +516,4 @@ yesBtn.addEventListener("click", ()=> {
 </script>
 
 </body>
-</html>
+</html> 
