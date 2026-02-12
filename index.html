@@ -155,7 +155,7 @@ button {
   margin: 25px auto 10px;
   position: relative;
   cursor: pointer;
-  transition: transform 1.2s ease, opacity 0.5s ease; /* Added opacity transition */
+  transition: transform 3.2s ease, opacity 4.5s ease; /* Added opacity transition */
   border-radius: 6px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   z-index: 1; /* Ensure it's above the image */
@@ -450,10 +450,14 @@ yesBtn.addEventListener("click", ()=> {
                       text.style.marginTop = "10px";
                       container.appendChild(text);
 					  
+					  text.style.opacity = "0";
+					  text.style.transition = "opacity 6s ease";
+					  
 
                       // Fade in the envelope
                       setTimeout(() => {
                         envelope.style.opacity = '1';
+						text.style.opacity = "1";
                       }, 10); // Small delay to trigger transition
 
                       envelope.addEventListener("click", (e) => {
