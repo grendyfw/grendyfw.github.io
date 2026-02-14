@@ -155,7 +155,7 @@ button {
   margin: 25px auto 10px;
   position: relative;
   cursor: pointer;
-  transition: transform 3.2s ease, opacity 4.5s ease; /* Added opacity transition */
+  transition: transform 1.2s ease, opacity 2.5s ease; /* Added opacity transition */
   border-radius: 6px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   z-index: 1; /* Ensure it's above the image */
@@ -363,6 +363,7 @@ yesBtn.addEventListener("click", ()=> {
     const messages = ["💖 YAY!!! BEST VALENTINE EVER 💖","🎵 It started from a song 🎵","🌸 Then we would get along 🌸","❤️ I've been stealing glances at your tenderly smile ❤️", "💞 There's no girl as sweet as you 💞", "🥰 You're so cute and pretty, you make my heart melt 🥰", "☎️Your telephone number is my favorite place☎️", "🌹 I could just look at you all night long 🌹", "💌 If i have a favorite song it would be you 💌", "💘 Spending time with you is my desire 💘"];
     const images = ["1.png","2.png","3.png","4.png","5.png","6.png","7.png","8.png","9.png","10.png"];
     let index = 0;
+
     const el = document.getElementById("final");
     const img = document.getElementById("final-image");
 
@@ -378,7 +379,7 @@ yesBtn.addEventListener("click", ()=> {
           clearInterval(t);
           el.classList.remove("typewriter");
           el.classList.add("hoverable");
-          callback();
+          if(callback) callback();
         }
       },120);
     }
@@ -388,16 +389,19 @@ yesBtn.addEventListener("click", ()=> {
       el.style.opacity=1;
       img.classList.remove("show");
       img.style.opacity=0;
-      img.style.pointerEvents = "none"; // disable click before fade-in
+      img.style.pointerEvents = "none";
 
       typeWriter(messages[index], ()=>{
+
         el.onclick = ()=>{
           el.classList.add("fade-out");
+
           setTimeout(()=>{
             el.style.opacity=0;
             img.src = images[index];
             img.classList.add("show");
             img.style.opacity=0;
+
             setTimeout(()=>{ img.style.opacity=1; },50);
 
             img.addEventListener("transitionend", function enableClick(e){
@@ -408,7 +412,7 @@ yesBtn.addEventListener("click", ()=> {
             });
 
             img.onclick = ()=>{
-              img.style.pointerEvents = "none"; // disable click during fade-out
+              img.style.pointerEvents = "none";
               img.style.opacity = 0;
 
               img.addEventListener("transitionend", function afterFadeOut(e){
@@ -416,10 +420,11 @@ yesBtn.addEventListener("click", ()=> {
                   img.classList.remove("show");
                   img.removeEventListener("transitionend", afterFadeOut);
                   index++;
+
                   if(index < messages.length){
                     showNext();
                   } else {
-                    // AFTER 10.PNG CLICK
+
                     launchConfetti();
                     clearInterval(hearts);
 
@@ -435,88 +440,131 @@ yesBtn.addEventListener("click", ()=> {
                     },300);
 
                     const finalMessage = "💖 Happy Valentine's day, dear Angela 💖";
+
                     typeWriter(finalMessage, ()=>{
-                      el.onclick = ()=> location.reload();
 
-                      // Add envelope and text below the final message
-                      const container = document.getElementById("final-container");
-                      const envelope = document.createElement("div");
-                      envelope.id = "envelope";
-                      container.appendChild(envelope);
-                      const text = document.createElement("p");
-                      text.textContent = "I wrote you a letter.";
-                      text.style.fontSize = "16px";
-                      text.style.color = "#333";
-                      text.style.marginTop = "10px";
-                      container.appendChild(text);
-					  
-					  text.style.opacity = "0";
-					  text.style.transition = "opacity 6s ease";
-					  
+                      let clickStage = 0;
+                      let clickLocked = false;
 
-                      // Fade in the envelope
-                      setTimeout(() => {
-                        envelope.style.opacity = '1';
-						text.style.opacity = "1";
-                      }, 10); // Small delay to trigger transition
+                      el.style.cursor = "pointer";
 
-                      envelope.addEventListener("click", (e) => {
-                        e.stopPropagation();
-						
-						clearInterval(petals);
-                        
-                        envelope.classList.add("open"); // animation
-                        setTimeout(() => {
+                      el.onclick = ()=>{
 
-                          const overlay = document.createElement("div");
-                          overlay.id = "letter-wrapper";
+                        if(clickLocked) return;
+                        clickLocked = true;
+                        setTimeout(()=> clickLocked = false, 800);
 
+                        // FIRST CLICK → show envelope
+                        if(clickStage === 0){
 
-                           overlay.innerHTML = `
-                            <div id="letter">
-                              <span id="close-letter">&times;</span>
-                              <p>Dear Angela,</p>
-                              <p>From the moment I first laid eyes on you, my heart knew it had found its true companion. Your beauty, both inside and out, captivates me every single day. The way your eyes sparkle with kindness and your smile warms the coldest of nights makes me realize how lucky I am to have you in my life.</p>
-                              <p>I cherish the moments we share, the laughter we create, and the love that grows stronger with each passing day. You are my inspiration, my joy, and my everything. Words cannot fully express the depth of my affection for you, but know that my love for you is eternal and unwavering.</p>
-                              <p>Happy Valentine's Day, my dearest Angela. May our love continue to blossom like the most beautiful flower.</p>
-                              <p>Forever yours,</p>
-                              <p>[Your Name]</p>
-                            </div>
-                          </div>
-                          `;
+                          const container = document.getElementById("final-container");
 
-                          document.body.appendChild(overlay);
-                          // close button
-                          document.getElementById("close-letter").onclick = () => {
-                            overlay.remove();
-                            envelope.classList.remove("open");
-							
-							restartPetals(); 
-                          };
-                          // click outside to close
-                          document.addEventListener("click", (e) => {
-                            if (e.target === overlay) {
-                              overlay.remove();
-                              envelope.classList.remove("open");
-							  
-							  restartPetals();
-                            }
+                          const envelope = document.createElement("div");
+                          envelope.id = "envelope";
+                          container.appendChild(envelope);
+
+                          const text = document.createElement("p");
+                          text.textContent = "I wrote you a letter.";
+                          text.style.fontSize = "16px";
+                          text.style.color = "#333";
+                          text.style.marginTop = "10px";
+                          text.style.opacity = "0";
+                          text.style.transition = "opacity 2.5s ease";
+                          container.appendChild(text);
+
+                          setTimeout(()=>{
+                            envelope.style.opacity="1";
+                            text.style.opacity="1";
+                          },10);
+
+                          envelope.addEventListener("click",(e)=>{
+                            e.stopPropagation();
+                            clearInterval(petals);
+                            envelope.classList.add("open");
+
+                            setTimeout(()=>{
+
+                              const overlay = document.createElement("div");
+                              overlay.id="letter-wrapper";
+
+                              overlay.innerHTML=`
+                                <div id="letter">
+                                  <span id="close-letter">&times;</span>
+                                  <p>Dear Angela,</p>
+                                  <p>When I first saw you, I thought we're going to make songs together... me and you somewhere only us two.
+                                  Then we get to know each other, sharing things we like, songs we like, anything we like.</p>
+                                  <p>I noticed how you've been working hard to achive your own happiness and that amazed me really.
+                                  Which somehow also makes me happy seeing you that happy.</p>
+                                  <p>At the same time you're also like a cupcake, you're so soft inside and flimsy outside (which makes want to hold your cheeks)</p>
+                                  <p>And cheeky little angel wants to play games she's so rude you know always flirting, always joyful, always funny and always nice.
+                                
+                                  Then you managed to capture my heart just by being ur cute self, ur pretty self, ur beautiful self.</p>
+                                  <p>I just want to let you know how awesome you are and you shouldn't be too hard on yourself, because i don't want to see those pretty hands hurting.</p>
+                                  <p>Angela, not only you're so smart and knowledgable but you always gave your best on everything whether its your hobbies, painting, work, and other stuff.
+                                  So, please be proud of yourself.</p>
+
+                                  <p>And the moment i saw those smile of yours, you already makes me fall into you.
+                                  Something about those lips of yours is soooo mesmerizing, I shall make it mine one day.</P>
+                                  <p>You don't know how I'm so captivated by those brown eyes of yours ngel.. it makes me run out of words, so please forgive me if sometimes I freezed up when you're around.
+                                  I think your parents didn't miss naming you Angela Putri Callista, because you are truly the most beautiful angel my eyes ever seen...</p>
+                                  <p></p>
+                                  <p>Happy Valentine's Day, dear Angela.</p>
+                                  <p>Forever yours,
+                                  <p>Tio</p>
+                                </div>
+                              `;
+
+                              document.body.appendChild(overlay);
+
+                              document.getElementById("close-letter").onclick=()=>{
+                                overlay.remove();
+                                envelope.classList.remove("open");
+                                restartPetals();
+                              };
+
+                              overlay.addEventListener("click",(ev)=>{
+                                if(ev.target===overlay){
+                                  overlay.remove();
+                                  envelope.classList.remove("open");
+                                  restartPetals();
+                                }
+                              });
+
+                            },500);
                           });
-                        }, 500); // Delay to match flap animation
-                      });
+
+                          clickStage = 1;
+                          return;
+                        }
+
+                        // SECOND CLICK → reload
+                        if(clickStage === 1){
+                          location.reload();
+                        }
+
+                      };
+
                     });
+
                   }
                 }
               });
             };
+
           },600);
+
         };
+
       });
+
     }
 
     showNext();
+
   },700);
+
 });
+
 </script>
 
 </body>
